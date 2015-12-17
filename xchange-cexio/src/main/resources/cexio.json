@@ -1,0 +1,53 @@
+{
+  "currencyPair": {
+    "BTC/USD": {
+      "priceScale": 4,
+      "minimumAmount": 0.010000000
+    },
+    "GHS/USD": {
+      "priceScale": 8,
+      "minimumAmount": 1.000000000
+    },
+    "LTC/USD": {
+      "priceScale": 3,
+      "minimumAmount": 1.200000000
+    },
+    "DRK/USD": {
+      "priceScale": 5
+    },
+    "GHS/BTC": {
+      "priceScale": 8,
+      "minimumAmount": 1.000000000
+    },
+    "LTC/BTC": {
+      "priceScale": 8,
+      "minimumAmount": 1.200000000
+    },
+    "DRK/BTC": {
+      "priceScale": 8
+    },
+    "GHS/LTC": {
+      "priceScale": 8,
+      "minimumAmount": 1.000000000
+    },
+    "DRK/LTC": {
+      "priceScale": 8
+    },
+    "BTC/EUR": {
+      "priceScale": 4,
+      "minimumAmount": 0.010000000
+    },
+    "LTC/EUR": {
+      "priceScale": 3,
+      "minimumAmount": 1.200000000
+    }
+  },
+  "currency": {},
+  "privateRateLimits": [
+    {
+      "calls": 60,
+      "timeUnit": "minutes"
+    }
+  ],
+  "shareRateLimits": true
+}
