@@ -14,6 +14,8 @@ import com.xeiam.xchange.exceptions.ExchangeException;
 import com.xeiam.xchange.exceptions.NotAvailableFromExchangeException;
 import com.xeiam.xchange.exceptions.NotYetImplementedForExchangeException;
 import com.xeiam.xchange.service.polling.trade.PollingTradeService;
+import com.xeiam.xchange.service.polling.trade.params.DefaultTradeHistoryParamPaging;
+import com.xeiam.xchange.service.polling.trade.params.TradeHistoryParamPaging;
 import com.xeiam.xchange.service.polling.trade.params.TradeHistoryParams;
 
 public class CoinbaseExTradeService extends CoinbaseExTradeServiceRaw implements PollingTradeService {
@@ -31,10 +33,18 @@ public class CoinbaseExTradeService extends CoinbaseExTradeServiceRaw implements
     return CoinbaseExAdapters.adaptOpenOrders(coinbaseExOpenOrders);
   }
 
+  protected CoinbaseExOrder[] getRejectedOrders() throws ExchangeException, NotAvailableFromExchangeException, NotYetImplementedForExchangeException, IOException {
+
+    return getCoinbaseExRejectedOrders();
+  }
+
   @Override
   public String placeMarketOrder(MarketOrder marketOrder)
       throws ExchangeException, NotAvailableFromExchangeException, NotYetImplementedForExchangeException, IOException {
-    throw new NotAvailableFromExchangeException();
+
+    CoinbaseExIdResponse response = placeCoinbaseExMarketOrder(marketOrder);
+
+    return response.getId();
   }
 
   @Override
@@ -55,11 +65,20 @@ public class CoinbaseExTradeService extends CoinbaseExTradeServiceRaw implements
 
   @Override
   public UserTrades getTradeHistory(TradeHistoryParams params) throws IOException {
-    throw new NotYetImplementedForExchangeException();
+
+    if (params instanceof TradeHistoryParamPaging) {
+      return getCoinbaseExTradeHistory((TradeHistoryParamPaging) params);
+    }
+
+    return getCoinbaseExTradeHistory((TradeHistoryParamPaging) createTradeHistoryParams());
   }
 
   @Override
   public TradeHistoryParams createTradeHistoryParams() {
-    return null;
+
+    DefaultTradeHistoryParamPaging params = new DefaultTradeHistoryParamPaging();
+    params.setPageNumber(1);
+    params.setPageLength(100);
+    return params;
   }
 }

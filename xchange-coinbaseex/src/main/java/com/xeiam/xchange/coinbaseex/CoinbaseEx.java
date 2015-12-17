@@ -3,14 +3,7 @@ package com.xeiam.xchange.coinbaseex;
 import java.io.IOException;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import com.xeiam.xchange.coinbaseex.dto.account.CoinbaseExAccount;
@@ -19,6 +12,7 @@ import com.xeiam.xchange.coinbaseex.dto.marketdata.CoinbaseExProductBook;
 import com.xeiam.xchange.coinbaseex.dto.marketdata.CoinbaseExProductStats;
 import com.xeiam.xchange.coinbaseex.dto.marketdata.CoinbaseExProductTicker;
 import com.xeiam.xchange.coinbaseex.dto.marketdata.CoinbaseExTrade;
+import com.xeiam.xchange.coinbaseex.dto.trade.CoinbaseExFill;
 import com.xeiam.xchange.coinbaseex.dto.trade.CoinbaseExIdResponse;
 import com.xeiam.xchange.coinbaseex.dto.trade.CoinbaseExOrder;
 import com.xeiam.xchange.coinbaseex.dto.trade.CoinbaseExPlaceOrder;
@@ -53,6 +47,11 @@ public interface CoinbaseEx {
   CoinbaseExTrade[] getTrades(@PathParam("baseCurrency") String baseCurrency, @PathParam("targetCurrency") String targetCurrency,
       @PathParam("limit") String limit) throws IOException;
 
+  @GET
+  @Path("fills?before={page}&limit={limit}")
+  CoinbaseExFill[] getFills(@PathParam("page") String page, @PathParam("limit") String limit, @HeaderParam("CB-ACCESS-KEY") String apiKey, @HeaderParam("CB-ACCESS-SIGN") ParamsDigest signer,
+      @HeaderParam("CB-ACCESS-TIMESTAMP") String timestamp, @HeaderParam("CB-ACCESS-PASSPHRASE") String passphrase);
+
   /** Authenticated calls */
 
   @GET
@@ -70,6 +69,13 @@ public interface CoinbaseEx {
   @Path("orders")
   @Consumes(MediaType.APPLICATION_JSON)
   CoinbaseExIdResponse placeLimitOrder(CoinbaseExPlaceOrder placeOrder, @HeaderParam("CB-ACCESS-KEY") String apiKey,
+      @HeaderParam("CB-ACCESS-SIGN") ParamsDigest signer, @HeaderParam("CB-ACCESS-TIMESTAMP") String timestamp,
+      @HeaderParam("CB-ACCESS-PASSPHRASE") String passphrase);
+
+  @POST
+  @Path("orders")
+  @Consumes(MediaType.APPLICATION_JSON)
+  CoinbaseExIdResponse placeMarketOrder(CoinbaseExPlaceOrder placeOrder, @HeaderParam("CB-ACCESS-KEY") String apiKey,
       @HeaderParam("CB-ACCESS-SIGN") ParamsDigest signer, @HeaderParam("CB-ACCESS-TIMESTAMP") String timestamp,
       @HeaderParam("CB-ACCESS-PASSPHRASE") String passphrase);
 
